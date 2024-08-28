@@ -10,7 +10,7 @@ class Player(Perudo):
         self.noDice= 2      # each player starts with 5 dice 
         self.cupDice = {i:0 for i in range(1,7)}        # before dice have been rolled --> they have no dice 
         self.activePlayer = True
-
+        super().incrementClassVars()
 
 
     def __str__(self) -> str:

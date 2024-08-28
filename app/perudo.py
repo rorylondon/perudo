@@ -1,5 +1,5 @@
 import random
-from player import Player
+# from player import Player
 
 
 class Perudo:
@@ -37,13 +37,22 @@ class Perudo:
                 cls.playerList.append(player)
                 print(f'You just added {player} to the game')
 
-        # instantiate Player instances for each user inputted string
-        for playerName in cls.playerList:
-            newPlayer = Player(playerName)
-            cls.childInstanceList.append(newPlayer)
-            cls.totalDice += 5
-            cls.noPlayers += 1
-        
+    @classmethod
+    def incrementClassVars(cls):
+        cls.totalDice += 5
+        cls.noPlayers += 1
+
+
+
+    noPlayers=0 # need to justify keeping this 
+    playerList=[] # populated by gameSetUp class method --> user inputs player names as strings --> then sequentially passed to child class to instantiate child objects --> potential redundancy 
+    childInstanceList=[]
+    totalDice=0 # need to justify keeping this --> on the fly solutions exist e.g. totaling Player().noDice --> this class attribute also requires maintanence logic 
+    currentBet={'quantity':1, 'value':1} # used to track the last bet 
+    currentTurnIndex=0 #used to track the current go 
+    activeGame=True
+    activeRound=False
+
 
     @classmethod
     def playGame(cls):
