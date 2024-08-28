@@ -1,0 +1,209 @@
+import random
+from player import Player
+
+
+class Perudo:
+
+    noPlayers=0 # need to justify keeping this 
+    playerList=[] # populated by gameSetUp class method --> user inputs player names as strings --> then sequentially passed to child class to instantiate child objects --> potential redundancy 
+    childInstanceList=[]
+    totalDice=0 # need to justify keeping this --> on the fly solutions exist e.g. totaling Player().noDice --> this class attribute also requires maintanence logic 
+    currentBet={'quantity':1, 'value':1} # used to track the last bet 
+    currentTurnIndex=0 #used to track the current go 
+    activeGame=True
+    activeRound=False
+
+    def __init__(self):
+        pass
+        # self.noPlayers=Perudo.noPlayers
+        # self.playerList=Perudo.playerList
+        # self.childInstanceList=[]
+        # self.totalDice=0 
+        # self.currentBet={'quantity':2, 'value':5}
+        # self.currentTurnIndex=0
+        # self.activeGame=True
+        # self.activeRound=False
+        
+
+    @classmethod
+    def gameSetUp(cls):
+        # accept players as user-inputted strings and appends them to class attribute list 'playerList'
+        player='_'
+        while player!='':
+            player=input('Press [ENTER] to start, or enter a player name to add players to the game.')
+            if player=='':
+                print(f'Starting Game with {cls.playerList}')
+            else:
+                cls.playerList.append(player)
+                print(f'You just added {player} to the game')
+
+        # instantiate Player instances for each user inputted string
+        for playerName in cls.playerList:
+            newPlayer = Player(playerName)
+            cls.childInstanceList.append(newPlayer)
+            cls.totalDice += 5
+            cls.noPlayers += 1
+        
+
+    @classmethod
+    def playGame(cls):
+        print('PLAYGAME METHOD START')
+        cls.activeGame=True
+
+        while cls.activeGame:
+            cls.roundSetUp()
+            cls.playRound()
+
+        print('PLAYGAME METHOD END')
+        
+
+    @classmethod
+    def roundSetUp(cls):
+        print('ROUND SET UP METHOD STARTS')
+        print(cls.totalDice)
+
+        # flags round as begun programatically
+        cls.activeRound=True
+
+        # review current players --> remove any players with no dice  
+        prevRoundChildInstanceList = cls.childInstanceList
+
+        newList = []
+        for i in prevRoundChildInstanceList:
+            if i.noDice > 0:
+                newList.append(i)
+            else:
+                pass
+        cls.childInstanceList=newList
+
+
+        # roles the dice for all the players
+        for i in cls.childInstanceList:
+            i.rollDice()
+        # prints to the players the round has begun 
+        print(f'The round has begun')
+        print('ROUND SET UP METHOD ENDS')
+
+        if len(cls.childInstanceList) == 1:
+            cls.activeGame=False
+
+        # TO DO: TRIGGER THE TURN TAKING PROCESS --> should this call nextTurn()? should i
+
+    @classmethod
+    def endGame(cls):
+        print(f'GAME OVER - {cls.childInstanceList[0]} WINS !!!!!')
+        cls.activeGame=False
+
+
+    @classmethod
+    def playRound(cls):
+        print('PLAYROUND METHOD STARTS')
+        while cls.activeRound:
+            currentTurnString = cls.playerList[cls.currentTurnIndex]
+            print(f"START ROUND METHOD: It is {currentTurnString}'s turn!")
+
+            # for the Player instance whos turn it is --> they will take their turns 
+            cls.takeTurn()
+        print('PLAYROUND METHOD ENDS')
+            
+
+
+    @classmethod
+    def takeTurn(cls):
+        print('TAKE TURN METHOD STARTS')
+        prevBet=cls.currentBet
+        currTurn=cls.currentTurnIndex
+        playList=cls.playerList
+        print(f'The current bet is {prevBet}')
+        turnChoice = input('Please select 1 to call the bet, or 2 to raise the bet.')
+        if turnChoice=='1':
+            print(f'{playList[currTurn]} called the bet of {prevBet} made by {playList[currTurn-1]}')
+            cls.callBet()
+        elif turnChoice=='2':
+            print(f'{playList[currTurn]} chose to raise the current bet of {prevBet} made by {playList[currTurn-1]}')
+            cls.makeBet()
+        cls.currentTurnIndex = (cls.currentTurnIndex + 1) % len(cls.playerList)
+        print('TAKETURN METHOD ENDS')
+
+
+
+
+    
+    @classmethod
+    def makeBet(cls) -> str:
+        print('MAKEBET METHOD STARTS')
+        print(f'The current bet is {cls.currentBet}')
+        currentQuantity=cls.currentBet['quantity']
+        currentValue=cls.currentBet['value']
+
+        validBet = False
+
+        while not validBet:
+            try:
+                quantityDice = int(input("Enter the quantity of dice: "))
+                valueDice = int(input("Enter the dice value (1-6): "))
+
+                # Input validation
+                if valueDice < 1 or valueDice > 6:
+                    print("Invalid dice value. Please enter a number between 1 and 6.")
+                    continue
+
+                # Validate the bet according to the game rules
+                if quantityDice > currentQuantity:
+                    validBet = True
+                elif quantityDice == currentQuantity and quantityDice > currentValue:
+                    validBet = True
+                else:
+                    print("This is not a valid bet, please try again.")
+
+            except ValueError:
+                print("Invalid input. Please enter valid integers.")
+
+        # Update the current bet
+        cls.currentBet['quantity'] = quantityDice
+        cls.currentBet['value'] = valueDice
+        print(f"{cls.playerList[cls.currentTurnIndex]} successfully bet {quantityDice} {valueDice}'s")
+        print('MAKEBET METHOD ENDS')
+
+    @classmethod
+    def callBet(cls)->str:
+        print('CALLBET METHOD STARTS')
+        cls.activeRound = False
+
+        # create all dice dict for counting all dice across all players
+        allDiceDict = {i:0 for i in range(1,7)}
+
+        # tally up all the dice for all players
+        # FUTURE WORK --> Hierarchy as reusable code for reference --> either logic or hard coding 
+        # question --> where should the logic to remove dice and or players go? an 'endRound()' function?? is that overly verbose & complicated?
+        # values to change: total dice, current bet, playerList, current turn index, active game, active round 
+        for i in cls.childInstanceList:
+            playerCup = i.cupDice
+            for j in playerCup:
+                allDiceDict[j] += playerCup[j]
+        print(f'ALL DICE DICT{allDiceDict}')
+
+        # compare the last bet to the count of all dice 
+
+        actualQuantity = allDiceDict[cls.currentBet['value']]
+        if actualQuantity >= cls.currentBet['quantity']:
+            print(f'The last bet was {cls.currentBet}\nThe actual quantity of dice was {actualQuantity}\nThe player who called the bet ({cls.playerList[cls.currentTurnIndex]}) looses')
+            cls.childInstanceList[cls.currentTurnIndex].noDice -= 1
+        elif actualQuantity < cls.currentBet['quantity']:
+            print(f'The last bet was {cls.currentBet}\nThe actual quantity of dice was {actualQuantity}\nThe player who placed the bet ({cls.playerList[cls.currentTurnIndex-1]}) looses')
+            cls.childInstanceList[cls.currentTurnIndex-1].noDice -= 1
+       
+        # amend class attributes to reflect lost dice and reset starting bet
+        cls.totalDice -= 1
+        cls.currentBet={'quantity':1, 'value':1}
+
+        print('CALLBET METHOD ENDS')
+        for i in cls.childInstanceList:
+            print(i)
+
+        
+
+
+
+    
+        
