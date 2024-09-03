@@ -4,10 +4,10 @@ from player import Player
 
 class Perudo:
 
-    noPlayers=0 # need to justify keeping this 
+    noPlayers=0 
     playerList=[] # populated by gameSetUp class method --> user inputs player names as strings --> then sequentially passed to child class to instantiate child objects --> potential redundancy 
     childInstanceList=[]
-    totalDice=0 # need to justify keeping this --> on the fly solutions exist e.g. totaling Player().noDice --> this class attribute also requires maintanence logic 
+    totalDice=0
     currentBet={'quantity':0, 'value':1} # used to track the last bet, instantiated with the last bet 
     currentTurnIndex=0 #used to track the current go 
     activeGame=True
@@ -24,7 +24,9 @@ class Perudo:
         while player!='':
             player=input('Press [ENTER] to start, or enter a player name to add players to the game.')
             if player=='':
+                print('========================================')
                 print(f'Starting Game with {cls.playerList}')
+                print('========================================')
             else:
                 cls.playerList.append(player)
                 print(f'You just added {player} to the game')
@@ -33,11 +35,11 @@ class Perudo:
             Perudo.childInstanceList.append(newPlayer)
 
     @classmethod
-    def incrementNoDice(cls, amount):
+    def incrementNoDice(cls, amount: int):
         cls.totalDice += amount
 
     @classmethod
-    def incrementNoPlayers(cls, amount):
+    def incrementNoPlayers(cls, amount: int):
         cls.noPlayers += amount
     
 
@@ -46,7 +48,9 @@ class Perudo:
 
     @classmethod
     def playGame(cls):
+        print('========================================')
         print('PLAYGAME METHOD START')
+        print('========================================')
         cls.activeGame=True
 
         while cls.activeGame:
@@ -58,8 +62,10 @@ class Perudo:
 
     @classmethod
     def roundSetUp(cls):
+        print('========================================')
         print('ROUND SET UP METHOD STARTS')
-        print(cls.totalDice)
+        print(f'Total Dice = {cls.totalDice}')
+        print('========================================')
 
         # flags round as begun programatically
         cls.activeRound=True
@@ -96,10 +102,14 @@ class Perudo:
 
     @classmethod
     def playRound(cls):
+        print('========================================')
         print('PLAYROUND METHOD STARTS')
+        print('========================================')
         while cls.activeRound:
             currentTurnString = cls.playerList[cls.currentTurnIndex]
-            print(f"START ROUND METHOD: It is {currentTurnString}'s turn!")
+            print('========================================')
+            print(f"It is {currentTurnString}'s turn!")
+            print('========================================')
 
             # for the Player instance whos turn it is --> they will take their turns 
             cls.takeTurn()
@@ -109,11 +119,13 @@ class Perudo:
 
     @classmethod
     def takeTurn(cls):
+        print('===================================')
         print('TAKE TURN METHOD STARTS')
+        print('===================================')
         prevBet=cls.currentBet
         currTurn=cls.currentTurnIndex
         playList=cls.playerList
-        print(f'The current bet is {prevBet}')
+        print(f'The current bet is {prevBet} made by {playList[currTurn-1]}')
         turnChoice = input('Please select 1 to call the bet, or 2 to raise the bet.')
         if turnChoice=='1':
             print(f'{playList[currTurn]} called the bet of {prevBet} made by {playList[currTurn-1]}')
@@ -122,7 +134,10 @@ class Perudo:
             print(f'{playList[currTurn]} chose to raise the current bet of {prevBet} made by {playList[currTurn-1]}')
             cls.makeBet()
         cls.currentTurnIndex = (cls.currentTurnIndex + 1) % len(cls.playerList)
+        print('===================================')
         print('TAKETURN METHOD ENDS')
+        print('===================================')
+
 
 
 
@@ -166,7 +181,9 @@ class Perudo:
 
     @classmethod
     def callBet(cls)->str:
+        print('===================================')
         print('CALLBET METHOD STARTS')
+        print('===================================')
         cls.activeRound = False
 
         # create all dice dict for counting all dice across all players 
@@ -195,8 +212,9 @@ class Perudo:
         # amend class attributes to reflect lost dice and reset starting bet
         cls.totalDice -= 1
         cls.currentBet={'quantity':0, 'value':1}
-
+        print('===================================')
         print('CALLBET METHOD ENDS')
+        print('===================================')
         for i in cls.childInstanceList:
             print(i)
 
