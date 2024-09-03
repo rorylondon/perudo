@@ -9,11 +9,10 @@ newGame = Perudo()
 newGame.gameSetUp()
 
 # instantiate Player instances for each user inputted string
-for playerName in Perudo.playerList:
-    newPlayer = Player(playerName)
-    # Perudo.childInstanceList.append(newPlayer)
-    # Perudo.totalDice += 5
-    # Perudo.noPlayers += 1
+# for playerName in Perudo.playerList:
+#     newPlayer = Player(playerName)
+#     Perudo.childInstanceList.append(newPlayer)
+
         
 
 # # rolls the dice for all players and sets activeRound to True

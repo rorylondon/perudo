@@ -1,5 +1,5 @@
 import random
-# from player import Player
+from player import Player
 
 
 class Perudo:
@@ -8,22 +8,14 @@ class Perudo:
     playerList=[] # populated by gameSetUp class method --> user inputs player names as strings --> then sequentially passed to child class to instantiate child objects --> potential redundancy 
     childInstanceList=[]
     totalDice=0 # need to justify keeping this --> on the fly solutions exist e.g. totaling Player().noDice --> this class attribute also requires maintanence logic 
-    currentBet={'quantity':1, 'value':1} # used to track the last bet 
+    currentBet={'quantity':0, 'value':1} # used to track the last bet, instantiated with the last bet 
     currentTurnIndex=0 #used to track the current go 
     activeGame=True
     activeRound=False
 
     def __init__(self):
         pass
-        # self.noPlayers=Perudo.noPlayers
-        # self.playerList=Perudo.playerList
-        # self.childInstanceList=[]
-        # self.totalDice=0 
-        # self.currentBet={'quantity':2, 'value':5}
-        # self.currentTurnIndex=0
-        # self.activeGame=True
-        # self.activeRound=False
-        
+
 
     @classmethod
     def gameSetUp(cls):
@@ -36,22 +28,20 @@ class Perudo:
             else:
                 cls.playerList.append(player)
                 print(f'You just added {player} to the game')
+        for playerName in cls.playerList:
+            newPlayer = Player(playerName)
+            Perudo.childInstanceList.append(newPlayer)
 
     @classmethod
-    def incrementClassVars(cls):
-        cls.totalDice += 5
-        cls.noPlayers += 1
+    def incrementNoDice(cls, amount):
+        cls.totalDice += amount
+
+    @classmethod
+    def incrementNoPlayers(cls, amount):
+        cls.noPlayers += amount
+    
 
 
-
-    noPlayers=0 # need to justify keeping this 
-    playerList=[] # populated by gameSetUp class method --> user inputs player names as strings --> then sequentially passed to child class to instantiate child objects --> potential redundancy 
-    childInstanceList=[]
-    totalDice=0 # need to justify keeping this --> on the fly solutions exist e.g. totaling Player().noDice --> this class attribute also requires maintanence logic 
-    currentBet={'quantity':1, 'value':1} # used to track the last bet 
-    currentTurnIndex=0 #used to track the current go 
-    activeGame=True
-    activeRound=False
 
 
     @classmethod
@@ -179,13 +169,14 @@ class Perudo:
         print('CALLBET METHOD STARTS')
         cls.activeRound = False
 
-        # create all dice dict for counting all dice across all players
+        # create all dice dict for counting all dice across all players 
         allDiceDict = {i:0 for i in range(1,7)}
 
-        # tally up all the dice for all players
         # FUTURE WORK --> Hierarchy as reusable code for reference --> either logic or hard coding 
         # question --> where should the logic to remove dice and or players go? an 'endRound()' function?? is that overly verbose & complicated?
         # values to change: total dice, current bet, playerList, current turn index, active game, active round 
+        
+        # tally up all the dice for all players
         for i in cls.childInstanceList:
             playerCup = i.cupDice
             for j in playerCup:
@@ -193,18 +184,17 @@ class Perudo:
         print(f'ALL DICE DICT{allDiceDict}')
 
         # compare the last bet to the count of all dice 
-
         actualQuantity = allDiceDict[cls.currentBet['value']]
         if actualQuantity >= cls.currentBet['quantity']:
             print(f'The last bet was {cls.currentBet}\nThe actual quantity of dice was {actualQuantity}\nThe player who called the bet ({cls.playerList[cls.currentTurnIndex]}) looses')
-            cls.childInstanceList[cls.currentTurnIndex].noDice -= 1
-        elif actualQuantity < cls.currentBet['quantity']:
-            print(f'The last bet was {cls.currentBet}\nThe actual quantity of dice was {actualQuantity}\nThe player who placed the bet ({cls.playerList[cls.currentTurnIndex-1]}) looses')
             cls.childInstanceList[cls.currentTurnIndex-1].noDice -= 1
-       
+        elif actualQuantity < cls.currentBet['quantity']:
+            # print(f'The last bet was {cls.currentBet}\nThe actual quantity of dice was {actualQuantity}\nThe player who placed the bet ({cls.playerList[cls.currentTurnIndex-1]}) looses')
+            # cls.childInstanceList[cls.currentTurnIndex-1].noDice -= 1
+            print(cls.childInstanceList, cls.currentTurnIndex)
         # amend class attributes to reflect lost dice and reset starting bet
         cls.totalDice -= 1
-        cls.currentBet={'quantity':1, 'value':1}
+        cls.currentBet={'quantity':0, 'value':1}
 
         print('CALLBET METHOD ENDS')
         for i in cls.childInstanceList:

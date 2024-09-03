@@ -1,16 +1,20 @@
 import random 
-from perudo import Perudo
+import perudo as p
 
-class Player(Perudo):
+class Player():
+
     def __init__(self, name: str):
-        # inherited attributes
-        super().__init__()
         # instance attributes
         self.name = name 
-        self.noDice= 2      # each player starts with 5 dice 
+        self.noDice= 5      # each player starts with 5 dice 
         self.cupDice = {i:0 for i in range(1,7)}        # before dice have been rolled --> they have no dice 
         self.activePlayer = True
-        super().incrementClassVars()
+
+
+        # call classmethods in composite class
+        # each player starts the game with 5 dice
+        p.Perudo.incrementNoDice(5)
+        p.Perudo.incrementNoPlayers(1)
 
 
     def __str__(self) -> str:
