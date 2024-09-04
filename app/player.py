@@ -4,6 +4,12 @@ import perudo as p
 class Player():
 
     def __init__(self, name: str):
+        '''
+        Inititalises the Player component Class instances for a given player.
+
+        Args:
+            - name: str describing the player name inputted by the user.
+        '''
         # instance attributes
         self.name = name 
         self.noDice= 1      # each player starts with 5 dice 
@@ -22,6 +28,10 @@ class Player():
 
     
     def rollDice(self):
+        '''
+        Randomly generates the dice values for each player.
+
+        '''
         print('========================================')
         # reset the dice cup from previous rounds
         self.cupDice = {i:0 for i in range(1,7)}    
