@@ -79,8 +79,9 @@ class Perudo:
             cls.roundSetUp()
             cls.playRound()
 
+        print('========================================')
         print('PLAYGAME METHOD END')
-        
+        print('========================================')
 
     @classmethod
     def roundSetUp(cls):
@@ -90,12 +91,15 @@ class Perudo:
         '''
         # if there is only 1 player remaining, they have won and the game should end
         # this logic should be moved --> the roundSetUp should not be called if there is one player remaining. If it needs to be called, it needs to be exited and the rest of the function skipped if condition is true 
-        if len(cls.childInstanceList) == 1:
-            cls.activeGame=False
+
         print('========================================')
         print('ROUND SET UP METHOD STARTS')
-        print(f'Total Dice = {cls.totalDice}')
         print('========================================')
+
+        if len(cls.childInstanceList) == 1:
+            cls.activeGame=False
+
+        print(f'Total Dice = {cls.totalDice}')
 
         # flags round as begun programatically
         # should this logic go here?
