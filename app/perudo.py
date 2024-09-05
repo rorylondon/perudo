@@ -266,10 +266,14 @@ class Perudo:
             print(f'The last bet was {cls.currentBet}\nThe actual quantity of dice was {actualQuantity}\nThe player who placed the bet ({cls.playerList[cls.currentTurnIndex-1]}) looses')
             cls.childInstanceList[cls.currentTurnIndex-1].noDice -= 1
             print(cls.childInstanceList, cls.currentTurnIndex)
+
+
         # amend class attributes to reflect lost dice and reset starting bet
         # 'round clean up activites' --> WOULD A ROUNDCLEANUP() FUNCTION BE CLEANER?
         cls.totalDice -= 1
         cls.currentBet={'quantity':0, 'value':1}
+
+        
         print('===================================')
         print('CALLBET METHOD ENDS')
         print('===================================')
