@@ -1,4 +1,5 @@
 from perudo import Perudo
+from player import Player
 
 
 # create a new game -> a new instance of the Perudo class
@@ -6,6 +7,13 @@ newGame = Perudo()
 
 # run the Perudo game set up class method -> asks the user to input the players
 newGame.gameSetUp()
+
+# instantiate Player instances for each user inputted string
+# for playerName in Perudo.playerList:
+#     newPlayer = Player(playerName)
+#     Perudo.childInstanceList.append(newPlayer)
+
+        
 
 # # rolls the dice for all players and sets activeRound to True
 # newGame.roundSetUp()
