@@ -5,9 +5,10 @@ from player import Player
 class Perudo:
 
     noPlayers=0 
-    playerList=[] # populated by gameSetUp class method --> user inputs player names as strings --> then sequentially passed to child class to instantiate child objects --> potential redundancy 
-    childInstanceList=[]
-    totalDice=0
+    # TO DO: COMBINED FUNCTIONALITY OF playerList AND childInstanceList - CURRENT REDUNDANCY. HAVE THE gameSetUp METHOD INSTANTIATE A COMPONENET CLASS INSTANCE AND APPEND TO A SINGLE LIST FOR EACH USER INPUT - DOES NOT NEED TWO LISTS
+    playerList=[] # Tracks all players added to the game. User inputted strings populated by gameSetUp class method.
+    childInstanceList=[] # Tracks all players added to the game. Player componenet class instances instanciated from playerList in the gameSetUp method.    
+    totalDice=0 # Current number of dice across all active players
     currentBet={'quantity':0, 'value':1} # used to track the last bet, instantiated with the last bet 
     currentTurnIndex=0 #used to track the current go 
     activeGame=True
@@ -23,6 +24,7 @@ class Perudo:
         Invites the user to input the names of the players, instantiates a Player Class instance for each and appends to a list for reference.
 
         '''
+    # TO DO: COMBINED FUNCTIONALITY OF playerList AND childInstanceList - CURRENT REDUNDANCY. HAVE THE gameSetUp METHOD INSTANTIATE A COMPONENET CLASS INSTANCE AND APPEND TO A SINGLE LIST FOR EACH USER INPUT - DOES NOT NEED TWO LISTS
         player='_'
         while player!='':
             player=input('Press [ENTER] to start, or enter a player name to add players to the game.')
