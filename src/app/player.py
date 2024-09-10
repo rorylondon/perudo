@@ -1,5 +1,5 @@
 import random 
-import perudo as p
+import src.app.perudo as p
 
 class Player():
 
