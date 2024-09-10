@@ -294,7 +294,7 @@ class Perudo:
             # TURN MANAGEMENT
             print(f'The last bet was {cls.currentBet}\nThe actual quantity of {cls.currentBet} was {actualQuantity}\nThe player who placed the bet ({cls.playerList[cls.currentTurnIndex-1].name}) loses')
             cls.playerList[cls.currentTurnIndex-1].noDice -= 1
-
+ 
 
         # amend class attributes to reflect lost dice and reset starting bet
         # 'round clean up activites' --> WOULD A ROUNDCLEANUP() FUNCTION BE CLEANER?
