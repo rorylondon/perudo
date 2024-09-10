@@ -1,5 +1,5 @@
 
-from player import Player
+from src.app.player import Player
 
 
 class Perudo:
